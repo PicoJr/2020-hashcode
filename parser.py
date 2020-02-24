@@ -16,8 +16,8 @@ class InputDataSet:
         self.n_books = n_books
         self.n_libraries = n_libraries
         self.n_days = n_days
-        self.book_scores = book_scores  # book i score = book_scores[i]
-        self.libraries = libraries  # List[Library]
+        self.book_scores: List[int] = book_scores  # book i score = book_scores[i]
+        self.libraries: List[Library] = libraries  # List[Library]
 
     def __str__(self):
         return f"B: {self.n_books} L: {self.n_libraries} D: {self.n_days}"
@@ -67,10 +67,11 @@ def write_output_file(output_data: OutputDataSet, output_file: TextIO):
         output_file.write(" ".join(str(lib) for lib in library_order.books) + "\n")
 
 
-def build_signup_schedule(libraries):
+def build_signup_schedule(input_data_set: InputDataSet, output_data_set: OutputDataSet):
     day = 0
     signup_schedule = []
-    for library in libraries:
+    for library_order in output_data_set.library_orders:
+        library = input_data_set.libraries[library_order.id_]
         day += library.signup_delay
-        signup_schedule.append(day)
+        signup_schedule.append((day, library.id_))
     return signup_schedule
